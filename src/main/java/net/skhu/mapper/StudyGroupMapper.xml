@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.skhu.mapper.StudyGroupMapper">
+	
+	<insert id="insert">
+		insert into study_group (study_group_id, study_user_id)
+		values (#{param1}, #{param2})
+	</insert>
+
+	<select id="count" resultType="int">
+		select count(*) count from study_group 
+		group by study_group_id 
+		having study_group_id=#{articleId} 
+	</select>
+	
+	<select id="findAllByUserId" resultType="StudyGroupDTO">    
+	   SELECT *    
+	   FROM study_group  
+	   where study_user_id = #{studyUserId}
+	</select> 
+	
+	<select id="findStudy" resultType="StudyGroupDTO">    
+	   SELECT s.study_group_id id, a.title, a.content, a.f_id 
+	   FROM study_group s left join article a on s.study_group_id=a.id
+	   where s.study_user_id = #{studyUserId}
+	</select>
+	
+	<delete id="delete">
+		delete from study_group
+		where study_group_id=#{articleId}
+	</delete>
+</mapper>

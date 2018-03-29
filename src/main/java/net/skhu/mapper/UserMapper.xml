@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.skhu.mapper.UserMapper">
+
+	<select id="login" resultType="String">
+		select nickname from user
+		where
+		user_id=#{user_id} and password=#{password}
+	</select>
+	
+	<select id="getIdByNickname" resultType="Integer">
+		select id from user
+		where
+		nickname=#{nickname}
+	</select>
+	
+	<select id="getNicknameBySendMessage" resultType="String">
+		select u.nickname from message m left join user u on m.u_receiveId=u.id
+		where
+		m.id=#{id}
+	</select>
+	
+	<select id="getNicknameByReceiveMessage" resultType="String">
+		select u.nickname from message m left join user u on m.u_sendId=u.id
+		where
+		m.id=#{id}
+	</select>
+	
+	<select id="getIdByUserId" resultType="int">
+		select id from user
+		where
+		user_id=#{user_id}
+	</select>
+	
+	<select id="findUserId" resultType="Integer">
+		select id from user
+		where
+		user_id=#{id}
+	</select>
+
+	<insert id="register" parameterType="net.skhu.dto.UserDTO"
+		useGeneratedKeys="true" keyProperty="id">
+		insert user (user_id, password,
+		nickname, email)
+		values (#{user_id}, #{password}, #{nickname},
+		#{email})
+	</insert>
+
+	<select id="checkId" parameterType="net.skhu.dto.UserDTO"
+		resultType="UserDTO">
+		select * from user
+		where user_id=#{user_id}
+	</select>
+
+	<select id="checkNickname" parameterType="net.skhu.dto.UserDTO"
+		resultType="UserDTO">
+		select * from user
+		where nickname=#{nickname}
+	</select>
+	
+	<select id="findNicknameAndEmail" resultType="UserDTO">
+		select nickname, email from user
+		where user_id=#{info}
+	</select>
+
+	<select id="bring" parameterType="net.skhu.dto.UserDTO"
+		resultType="UserDTO">
+		select * from user
+		where user_id=#{user_id}
+	</select>
+
+	<update id="change" parameterType="net.skhu.dto.UserDTO">
+		update user
+		set password=#{password}, nickname=#{nickname}, email=#{email}
+		where user_id=#{user_id}
+	</update>
+
+	<select id="find" parameterType="net.skhu.dto.UserDTO"
+		resultType="UserDTO">
+		select *
+		from user
+		where nickname = #{nickname} and email = #{email}
+	</select>
+	
+	<select id="findMember" resultType="UserDTO">
+		select u.*
+		from study_group s left join user u on s.study_user_id = u.id
+		where s.study_group_id = #{param1} and s.study_user_id != #{param2}
+	</select>
+
+	<update id="savePw" parameterType="net.skhu.dto.UserDTO">
+		update user
+		set password=#{password}
+		where nickname=#{nickname} and email=#{email}
+	</update>
+	
+</mapper>

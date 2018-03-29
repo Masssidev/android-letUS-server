@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.skhu.mapper.ArticleMapper">
+	
+	<insert id="insertStudy" useGeneratedKeys="true" keyProperty="id">
+		insert into article (title, start_date, expire_date, bo_id, category, u_id, f_id, content, member)
+		values (#{title}, #{start_date}, #{expire_date}, #{bo_id}, #{category}, #{u_id}, #{f_id}, #{content}, #{member})
+	</insert>
+	
+	<insert id="insertFair"	useGeneratedKeys="true" keyProperty="id">
+		insert into article (title, start_date, expire_date, bo_id, category, u_id, f_id, content)
+		values (#{title}, #{start_date}, #{expire_date}, #{bo_id}, #{category}, #{u_id}, #{f_id}, #{content})
+	</insert>
+	
+	<update id="hit">
+		update article set hits=hits+1
+		where id=#{id}
+	</update>
+	
+	<update id="editMyArticle">
+		update article set title=#{param2}, content=#{param3}
+		where id=#{param1}
+	</update>
+	
+	<select id="findAllStudy" resultType="ArticleDTO">    
+	   SELECT a.*, l.user_id, f.path     
+	   FROM article a LEFT JOIN file f ON a.f_id = f.id left outer join likearticle l on a.id=l.a_id   
+	   where member is not null
+	   order by a.id desc
+	</select> 
+	
+	<select id="searchStudy" resultType="ArticleDTO">    
+	   SELECT a.*, l.user_id, f.path     
+	   FROM article a LEFT JOIN file f ON a.f_id = f.id left outer join likearticle l on a.id=l.a_id  
+	   where a.title LIKE CONCAT('%', #{search}, '%') or a.content LIKE CONCAT('%', #{search}, '%') and member is not null
+	   order by a.id desc
+	</select> 
+	
+	<select id="searchNotice" resultType="ArticleDTO">    
+	   SELECT a.*, l.user_id, f.path     
+	   FROM article a LEFT JOIN file f ON a.f_id = f.id left outer join likearticle l on a.id=l.a_id
+	   where a.title LIKE CONCAT('%', #{search}, '%') or a.content LIKE CONCAT('%', #{search}, '%') and member is null
+	   order by a.id desc
+	</select> 
+	
+	<select id="findAllNotice" resultType="ArticleDTO">    
+	   SELECT a.*, l.user_id, f.path     
+	   FROM article a LEFT JOIN file f ON a.f_id = f.id left outer join likearticle l on a.id=l.a_id  
+	   where member is null
+	   order by a.id desc
+	</select> 
+	
+	<select id="findStudyByUser" resultType="ArticleDTO">    
+	   SELECT * 
+	   FROM article
+	   where member is not null and u_id=#{id}
+	   order by id desc
+	</select>
+	
+	<select id="findNoticeByUser" resultType="ArticleDTO">    
+	   SELECT *     
+	   FROM article
+	   where member is null and u_id=#{id}
+	   order by id desc
+	</select>
+	
+	<select id="findMainStudy" resultType="ArticleDTO">    
+	   SELECT a.*, l.user_id, f.path     
+	   FROM article a LEFT JOIN file f ON a.f_id = f.id left outer join likearticle l on a.id=l.a_id
+	   where member is not null
+	   order by hits desc
+	   limit 0,3
+	</select> 
+
+	<select id="findMainNotice" resultType="ArticleDTO">    
+	   SELECT a.*, l.user_id, f.path     
+	   FROM article a LEFT JOIN file f ON a.f_id = f.id left outer join likearticle l on a.id=l.a_id 
+	   where member is null
+	   order by hits desc
+	   limit 0,3
+	</select> 
+	
+	<select id="findLikeStudy" resultType="ArticleDTO">    
+	   SELECT a.id, a.title, a.content, a.f_id   
+	   FROM article a LEFT JOIN file f ON a.f_id = f.id left join likearticle l on a.id=l.a_id
+	   where a.member is not null and l.user_id=#{id}
+	</select> 
+	
+	<select id="findLikeNotice" resultType="ArticleDTO">    
+	   SELECT a.id, a.title, a.content, a.f_id     
+	   FROM article a LEFT JOIN file f ON a.f_id = f.id left join likearticle l on a.id=l.a_id 
+	   where a.member is null and l.user_id=#{id}
+	</select> 
+	
+	<select id="findAllStudyFile" resultType="FileDTO">    
+	   SELECT f.path     
+	   FROM article a LEFT JOIN file f ON a.f_id = f.id   
+	   where member is null
+	   order by a.id desc
+	</select> 
+	
+	<select id="findOneFair" resultType="ArticleDTO">    
+	   SELECT a.*, l.user_id, u.nickname FROM article a left join user u on a.u_id=u.id left outer join likearticle l on a.id=l.a_id
+	   where a.id=#{id}
+	</select>
+	
+	<select id="findOneStudy" resultType="ArticleDTO">    
+	   SELECT a.*, l.user_id, u.nickname FROM article a left join user u on a.u_id=u.id left outer join likearticle l on a.id=l.a_id
+	   where a.id=#{id}
+	</select>
+	
+	<select id="getMemberAndExpire" resultType="ArticleDTO">    
+	   SELECT member, expire_date from article
+	   where id=#{id}
+	</select>
+	
+	<select id="findTitle" resultType="String">    
+	   SELECT title from article
+	   where id=#{id}
+	</select>
+	
+	<delete id="deleteMyArticle">
+		delete from article
+		where id=#{id}
+	</delete>
+</mapper>

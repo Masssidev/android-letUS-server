@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.skhu.mapper.LikeMapper">
+	
+	<insert id="insert" parameterType="net.skhu.dto.LikeDTO"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into likeArticle (a_id, user_id)
+		values (#{a_id}, #{user_id})
+	</insert>
+	
+	<delete id="delete" parameterType="net.skhu.dto.LikeDTO">
+		delete from likeArticle
+		where a_id=#{a_id} and user_id=#{user_id}
+	</delete>
+	
+	<select id="findLikeChecked" resultType="Integer">
+		select id from likearticle 
+		where a_id=#{param1} and user_id=#{param2}
+	</select>
+
+</mapper>
