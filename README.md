@@ -60,4 +60,7 @@
 
 ## 저장소
 ![image](https://user-images.githubusercontent.com/33171233/40887819-3e862392-6789-11e8-8ef3-a143aba27744.png)
+<hr/>
 
+## 수상
+* 2018년 성공회대 소프트웨어 경진대회 자유주제 3
