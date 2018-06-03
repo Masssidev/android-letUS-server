@@ -15,7 +15,7 @@
 
 
 ## Maven dependency
-<dependencies>
+		<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-jdbc</artifactId>
